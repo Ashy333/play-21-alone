@@ -8,35 +8,63 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Casino Theme - Dark green felt with gold accents */
+    --background: 140 20% 8%;
+    --foreground: 45 15% 85%;
 
-    --card: 0 0% 100%;
+    --card: 0 0% 98%;
     --card-foreground: 222.2 84% 4.9%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 140 15% 12%;
+    --popover-foreground: 45 15% 85%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Gold primary color for luxury feel */
+    --primary: 45 90% 60%;
+    --primary-foreground: 140 20% 8%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Rich casino green secondary */
+    --secondary: 140 25% 15%;
+    --secondary-foreground: 45 15% 85%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 140 15% 20%;
+    --muted-foreground: 45 10% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Gold accent */
+    --accent: 45 85% 55%;
+    --accent-foreground: 140 20% 8%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Red for danger/bust */
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 140 15% 25%;
+    --input: 140 15% 18%;
+    --ring: 45 90% 60%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Custom casino colors */
+    --casino-felt: 140 20% 8%;
+    --casino-felt-light: 140 25% 15%;
+    --casino-gold: 45 90% 60%;
+    --casino-gold-light: 45 95% 70%;
+    --casino-cream: 45 15% 85%;
+    --casino-red: 0 75% 55%;
+    --casino-green: 120 50% 45%;
+
+    /* Gradients */
+    --gradient-gold: linear-gradient(135deg, hsl(var(--casino-gold)), hsl(var(--casino-gold-light)));
+    --gradient-felt: linear-gradient(180deg, hsl(var(--casino-felt)), hsl(var(--casino-felt-light)));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(0 0% 95%));
+
+    /* Shadows */
+    --shadow-card: 0 4px 15px rgba(0, 0, 0, 0.3);
+    --shadow-gold: 0 4px 20px hsla(var(--casino-gold), 0.4);
+    --shadow-glow: 0 0 30px hsla(var(--casino-gold), 0.6);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +129,105 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Casino table background */
+  .casino-table {
+    background: var(--gradient-felt);
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.01) 0%, transparent 50%);
+  }
+
+  /* Playing card styles */
+  .playing-card {
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-smooth);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .playing-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Gold button variant */
+  .btn-gold {
+    background: var(--gradient-gold);
+    color: hsl(var(--primary-foreground));
+    box-shadow: var(--shadow-gold);
+    transition: var(--transition-bounce);
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-gold:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Card flip animation */
+  .card-flip {
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+  }
+
+  .card-flip.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+  }
+
+  .card-back {
+    transform: rotateY(180deg);
+  }
+
+  /* Win/lose animations */
+  .win-glow {
+    animation: winPulse 1s ease-in-out;
+  }
+
+  .bust-shake {
+    animation: bustShake 0.5s ease-in-out;
+  }
+
+  @keyframes winPulse {
+    0%, 100% { 
+      box-shadow: var(--shadow-card); 
+      transform: scale(1);
+    }
+    50% { 
+      box-shadow: var(--shadow-glow); 
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes bustShake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
+    20%, 40%, 60%, 80% { transform: translateX(3px); }
+  }
+
+  @keyframes dealCard {
+    from {
+      transform: translateY(-100px) rotate(180deg);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+    }
+  }
+
+  .deal-animation {
+    animation: dealCard 0.6s ease-out;
   }
 }
